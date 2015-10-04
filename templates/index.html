@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+    <form class="input-group" action="/add" method="post">
+		{% csrf_token %}
+		{{ form.content }}
+		<span class="input-group-btn">
+			<button class="btn btn-default" type="submit">Add</button>
+		</span>
+    </form>
+    <div>
+        {% if todos %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Content</th>
+                        <th>Status</th>
+                        <th>Time</th>
+                        <th>Operation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   {% for todo in todos %}
+                        <tr>
+                            <td>{{ todo.content }}</td>
+                            <td>
+                                {% if todo.status == 1 %}
+                                True
+                                {% else %}
+                                False
+                                {% endif %}
+                            </td>
+                            <td>{{ todo.time }}</td>
+                            {% if todo.status == 1 %}
+                                <td><a href="/undone/?id={{ todo.id }}" class="btn btn-primary">Undone</a></td>
+                            {% else %}
+                                <td><a href="/done/?id={{ todo.id }}" class="btn btn-primary">Done</a></td>
+                            {% endif %}
+                            <td><a href="/delete/?id={{ todo.id }}" class="btn btn-danger">Delete</a></td>
+                        </tr>
+                   {% endfor %}
+                </tbody>
+            </table>
+    {% else %}
+            <h4 class="text-info">No todos, please add</h4>
+    {% endif %}
+    </div>
+{% endblock %}
